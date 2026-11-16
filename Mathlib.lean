@@ -6065,6 +6065,8 @@ public import Mathlib.NumberTheory.LSeries.HurwitzZetaOdd
 public import Mathlib.NumberTheory.LSeries.HurwitzZetaValues
 public import Mathlib.NumberTheory.LSeries.Injectivity
 public import Mathlib.NumberTheory.LSeries.Linearity
+public import Mathlib.NumberTheory.LSeries.LittlewoodConverse
+public import Mathlib.NumberTheory.LSeries.LittlewoodMertens
 public import Mathlib.NumberTheory.LSeries.MellinEqDirichlet
 public import Mathlib.NumberTheory.LSeries.Nonvanishing
 public import Mathlib.NumberTheory.LSeries.Positivity
@@ -6075,6 +6077,7 @@ public import Mathlib.NumberTheory.LSeries.SumCoeff
 public import Mathlib.NumberTheory.LSeries.WeakPNT
 public import Mathlib.NumberTheory.LSeries.WienerIkehara
 public import Mathlib.NumberTheory.LSeries.ZMod
+public import Mathlib.NumberTheory.LSeries.ZetaInvGrowth
 public import Mathlib.NumberTheory.LSeries.ZetaZeros
 public import Mathlib.NumberTheory.LegendreSymbol.AddCharacter
 public import Mathlib.NumberTheory.LegendreSymbol.Basic
