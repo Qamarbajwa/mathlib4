@@ -58,8 +58,13 @@ def addExp4 : List Nat → List Nat → List Nat
   | _, [] => []
   | x :: xs, y :: ys => (x + y) :: addExp4 xs ys
 
+def natListEqBool (l1 l2 : List Nat) : Bool :=
+  match l1 with
+  | [] => match l2 with | [] => true | _ :: _ => false
+  | x :: xs => match l2 with | [] => false | y :: ys => (x == y) && natListEqBool xs ys
+
 def coeffInSocle (m : List Nat) (socle : List (List Nat × Int)) : Int :=
-  socle.foldl (fun acc (s, c) => if s == m then acc + c else acc) 0
+  socle.foldl (fun acc (s, c) => if natListEqBool s m then acc + c else acc) 0
 
 def planeSoclePoly : List (List Nat × Int) := [([0, 4, 4, 4], 1)]
 
@@ -141,15 +146,15 @@ theorem coeffInSocle_addExp4_comm (socle : List (List Nat × Int)) (m1 m2 : List
     coeffInSocle (addExp4 m1 m2) socle = coeffInSocle (addExp4 m2 m1) socle := by
   rw [addExp4_comm]
 
-private def intListEq : List Int → List Int → Bool
-  | [], [] => true
-  | x :: xs, y :: ys => intEq x y && intListEq xs ys
-  | _, _ => false
+private def intListEq (l1 l2 : List Int) : Bool :=
+  match l1 with
+  | [] => match l2 with | [] => true | _ :: _ => false
+  | x :: xs => match l2 with | [] => false | y :: ys => intEq x y && intListEq xs ys
 
-private def intMatEq : List (List Int) → List (List Int) → Bool
-  | [], [] => true
-  | r1 :: rs1, r2 :: rs2 => intListEq r1 r2 && intMatEq rs1 rs2
-  | _, _ => false
+private def intMatEq (m1 m2 : List (List Int)) : Bool :=
+  match m1 with
+  | [] => match m2 with | [] => true | _ :: _ => false
+  | r1 :: rs1 => match m2 with | [] => false | r2 :: rs2 => intListEq r1 r2 && intMatEq rs1 rs2
 
 set_option maxHeartbeats 2000000 in
 /-- Explicit Macaulay pairing matrices satisfy transpose duality across all `0 <= d <= 12`

@@ -192,8 +192,13 @@ def addExp4 : List Nat → List Nat → List Nat
   | _, [] => []
   | x :: xs, y :: ys => (x + y) :: addExp4 xs ys
 
+def natListEqBool (l1 l2 : List Nat) : Bool :=
+  match l1 with
+  | [] => match l2 with | [] => true | _ :: _ => false
+  | x :: xs => match l2 with | [] => false | y :: ys => (x == y) && natListEqBool xs ys
+
 def coeffInSocle (m : List Nat) (socle : List (List Nat × Int)) : Int :=
-  socle.foldl (fun acc (s, c) => if s == m then acc + c else acc) 0
+  socle.foldl (fun acc (s, c) => if natListEqBool s m then acc + c else acc) 0
 
 def planeSoclePoly : List (List Nat × Int) := [([0, 4, 4, 4], 1)]
 
