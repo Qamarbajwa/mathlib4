@@ -498,6 +498,16 @@ theorem integral_sin_pow :
 theorem integral_sin_sq : ∫ x in a..b, sin x ^ 2 = (sin a * cos a - sin b * cos b + b - a) / 2 := by
   simp [field, integral_sin_pow, add_sub_assoc]
 
+/-- Upper bound `∫ x in (0 : ℝ)..a, sin x ^ 2 ≤ a ^ 3 / 3` for `0 ≤ a`. -/
+theorem integral_sin_sq_le (ha : 0 ≤ a) :
+    ∫ x in (0 : ℝ)..a, Real.sin x ^ 2 ≤ a ^ 3 / 3 := by
+  calc
+    ∫ x in (0 : ℝ)..a, Real.sin x ^ 2 ≤ ∫ x in (0 : ℝ)..a, x ^ 2 := by
+      refine intervalIntegral.integral_mono_on ha ?_ ?_ fun _ _ => Real.sin_sq_le_sq
+      · exact (continuous_sin.pow 2).intervalIntegrable 0 a
+      · exact (continuous_pow 2).intervalIntegrable 0 a
+    _ = a ^ 3 / 3 := by simp; norm_num
+
 theorem integral_sin_pow_odd :
     (∫ x in 0..π, sin x ^ (2 * n + 1)) = 2 * ∏ i ∈ range n, (2 * (i : ℝ) + 2) / (2 * i + 3) := by
   induction n with
