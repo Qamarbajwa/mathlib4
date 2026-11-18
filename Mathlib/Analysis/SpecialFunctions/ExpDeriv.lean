@@ -289,6 +289,18 @@ theorem iter_deriv_exp : ∀ n : ℕ, deriv^[n] exp = exp
 
 end Real
 
+/-- Elementary cubic lower bound `x ^ 3 / 27 ≤ Real.exp x` for `0 ≤ x`. -/
+theorem Real.pow_three_div_twenty_seven_le_exp {x : ℝ} (hx : 0 ≤ x) :
+    x ^ 3 / 27 ≤ Real.exp x := by
+  have h1 : 1 + x / 3 ≤ Real.exp (x / 3) := by
+    simpa [add_comm] using Real.add_one_le_exp (x / 3)
+  have hpow : (1 + x / 3) ^ 3 ≤ Real.exp x := by
+    calc (1 + x / 3) ^ 3 ≤ Real.exp (x / 3) ^ 3 := pow_le_pow_left₀ (by linarith) h1 3
+      _ = Real.exp (↑(3 : ℕ) * (x / 3)) := (Real.exp_nat_mul (x / 3) 3).symm
+      _ = Real.exp x := by congr 1; norm_num; ring
+  have hpoly : x ^ 3 / 27 ≤ (1 + x / 3) ^ 3 := by nlinarith [sq_nonneg x]
+  exact hpoly.trans hpow
+
 section
 
 /-! Register lemmas for the derivatives of the composition of `Real.exp` with a differentiable
