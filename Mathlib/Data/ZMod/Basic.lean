@@ -816,6 +816,13 @@ lemma isUnit_iff_coprime (m n : ℕ) : IsUnit (m : ZMod n) ↔ m.Coprime n := by
   rw [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm, ← H']
   exact Nat.gcd_rec n m
 
+/-- Multiplication by a coprime natural number is injective on `0` in `ZMod n`. -/
+theorem coe_mul_eq_zero_iff {n k : ℕ} (h : Nat.Coprime k n) (m : ZMod n) :
+    (k : ZMod n) * m = 0 ↔ m = 0 := by
+  have hu : IsUnit (k : ZMod n) := (isUnit_iff_coprime k n).mpr h
+  rw [mul_comm]
+  simpa [IsUnit.unit_spec] using Units.mul_left_eq_zero (u := hu.unit) (a := m)
+
 @[simp]
 lemma coprime_mod_iff_coprime (m n : ℕ) : (m % n).Coprime n ↔ m.Coprime n := by
   suffices (m % n).gcd n = m.gcd n by grind
