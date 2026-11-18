@@ -289,6 +289,17 @@ theorem iter_deriv_exp : ∀ n : ℕ, deriv^[n] exp = exp
 
 end Real
 
+/-- Elementary cubic upper bound `(1 + x / 3) ^ 3 ≤ Real.exp x` for `0 ≤ x`. -/
+theorem Real.one_add_div_three_pow_three_le_exp {x : ℝ} (hx : 0 ≤ x) :
+    (1 + x / 3) ^ 3 ≤ Real.exp x := by
+  have h1 : 0 ≤ 1 + x / 3 := by linarith
+  have h2 : 1 + x / 3 ≤ Real.exp (x / 3) := by
+    simpa [add_comm] using Real.add_one_le_exp (x / 3)
+  calc
+    (1 + x / 3) ^ 3 ≤ Real.exp (x / 3) ^ 3 := pow_le_pow_left₀ h1 h2 3
+    _ = Real.exp (↑(3 : ℕ) * (x / 3)) := (Real.exp_nat_mul (x / 3) 3).symm
+    _ = Real.exp x := by congr 1; norm_num; ring
+
 section
 
 /-! Register lemmas for the derivatives of the composition of `Real.exp` with a differentiable
