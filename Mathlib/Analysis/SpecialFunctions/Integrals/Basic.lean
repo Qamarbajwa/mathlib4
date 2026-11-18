@@ -670,3 +670,14 @@ theorem integral_sqrt_one_sub_sq : ∫ x in (-1 : ℝ)..1, √(1 - x ^ 2 : ℝ) 
           rw [uIoc_of_le (neg_le_self (le_of_lt (half_pos Real.pi_pos))), Set.mem_Ioc] at h
           rw [← Real.cos_eq_sqrt_one_sub_sin_sq (le_of_lt h.1) h.2, pow_two]
     _ = π / 2 := by simp
+
+/-- Upper bound `∫ x in (0 : ℝ)..a, sin x ^ 2 ≤ a ^ 3 / 3` for non-negative `a`,
+obtained directly from `Real.sin_sq_le_sq`. -/
+theorem integral_sin_sq_le (ha : 0 ≤ a) :
+    ∫ x in (0 : ℝ)..a, sin x ^ 2 ≤ a ^ 3 / 3 := by
+  calc
+    ∫ x in (0 : ℝ)..a, sin x ^ 2 ≤ ∫ x in (0 : ℝ)..a, x ^ 2 := by
+      refine intervalIntegral.integral_mono_on ha ?_ ?_ fun x _ => Real.sin_sq_le_sq
+      · exact (continuous_sin.pow 2).intervalIntegrable 0 a
+      · exact (continuous_pow 2).intervalIntegrable 0 a
+    _ = a ^ 3 / 3 := by simp; norm_num
