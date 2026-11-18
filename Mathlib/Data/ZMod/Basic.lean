@@ -816,6 +816,12 @@ lemma isUnit_iff_coprime (m n : ℕ) : IsUnit (m : ZMod n) ↔ m.Coprime n := by
   rw [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm, ← H']
   exact Nat.gcd_rec n m
 
+/-- Left multiplication by a coprime natural number is bijective on `ZMod n`. -/
+theorem coe_mul_bijective_of_coprime {n k : ℕ} (h : Nat.Coprime k n) :
+    Function.Bijective (fun m : ZMod n => (k : ZMod n) * m) := by
+  have hu : IsUnit (k : ZMod n) := (isUnit_iff_coprime k n).mpr h
+  simpa [IsUnit.unit_spec] using Units.mulLeft_bijective hu.unit
+
 @[simp]
 lemma coprime_mod_iff_coprime (m n : ℕ) : (m % n).Coprime n ↔ m.Coprime n := by
   suffices (m % n).gcd n = m.gcd n by grind
